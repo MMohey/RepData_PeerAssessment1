@@ -1,0 +1,73 @@
+---
+title: 'Peer-graded Assignment: Course Project 1'
+author: "Moh A"
+date: "02/12/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Peer-graded Assignment: Course Project 1
+
+## Loading and preprocessing the data
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(lubridate)
+library(ggplot2)
+library(scales)
+
+
+unzip("activity.zip")
+dt <- read.csv("activity.csv", colClasses = c("integer", "Date", "factor"))
+dt$month <- as.numeric(format(dt$date, "%m"))
+clean_dt <- na.omit(dt)
+rownames(clean_dt) <- 1:nrow(clean_dt)
+```
+
+## What is mean total number of steps taken per day?
+
+### 1. Make a histogram of the total number of steps taken each day
+
+```{r}
+sum_steps <- aggregate(clean_dt$steps, list(clean_dt$date), FUN = 'sum')
+ggplot(sum_steps, aes(x = sum_steps$Group.1)) + geom_histogram(aes(weight=sum_steps$x), bins = 61, col= 'red', fill = 'green', alpha= '0.5')+ scale_x_date(labels = date_format("%Y-%m-%d")) + labs(title="Histogram of the total number of steps taken each day") +
+         labs(x="Day", y="Total number of steps") 
+```
+
+### 2. Calculate and report the mean and median total number of steps taken per day
+
+ * Mean: 
+
+```{r}
+mean(sum_steps$x)
+```
+
+
+ - Median:
+
+```{r}
+median(sum_steps$x)
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
